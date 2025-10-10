@@ -59,7 +59,6 @@ body::before {
   color: #ffe4f0;
 }
 
-/* Container */
 .container1 {
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(20px);
@@ -100,7 +99,6 @@ body::before {
 .profile-btn.danger:hover {
   background: #d50000;
 }
-
 
 .navbar {
   position: fixed;
@@ -197,4 +195,52 @@ body::before {
 @keyframes fadeIn {
   from { transform: scale(0.8); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 500px) {
+  .profile-card {
+    padding: 30px 20px;
+  }
+
+  .avatar img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .profile-name {
+    font-size: 22px;
+  }
+
+  .streak {
+    font-size: 14px;
+  }
+
+  .container1 .text2 {
+    font-size: 16px;
+  }
+
+  .profile-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .navbar .nav-link {
+    font-size: 12px;
+  }
+
+  .modal-content {
+    padding: 20px;
+  }
+
+  .modal-content h2 {
+    font-size: 20px;
+  }
+
+  .modal-content input {
+    padding: 8px;
+  }
+
+  .modal-content button {
+    padding: 10px;
+  }
 }
