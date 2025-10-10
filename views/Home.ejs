@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Diary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Handlee&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url("../images/inside.jpg") no-repeat center center/cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(255,105,180,0.35); 
+      z-index: 1;
+    }
+
+    .main-area {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .container {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      color: white;
+      text-align: center;
+    }
+
+    .container h1.text1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #ffe4f0;
+    }
+
+    .mood-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .container2 {
+      background: rgba(255,255,255,0.85);
+      color: #333;
+      font-size: 18px;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 80px;
+      text-align: center;
+      transition: 0.3s;
+      user-select: none;
+    }
+
+    .container2.selected {
+      background: #ff69b4;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .textarea textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      resize: none;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 15px;
+      background: rgba(255,255,255,0.85);
+      color: #333;
+    }
+
+    button#btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #ff69b4;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button#btn:hover {
+      background: #ff1493;
+    }
+
+    .navbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(15px);
+      padding: 10px 0;
+      z-index: 10;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .navbar .nav-link, .navbar .logout-btn {
+      color: #ffe4f0;
+      text-decoration: none;
+      font-weight: bold;
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .navbar .nav-link.active {
+      color: #ff69b4;
+    }
+
+    .navbar .nav-link:hover, .navbar .logout-btn:hover {
+      color: #ff1493;
+    }
+
+    @media(max-width:500px){
+      .container2 {
+        width: 60px;
+        font-size: 16px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="main-area">
+    <div class="container">
+      <h1 class="text1">How are you feeling today, Cozy Friend?</h1>
+      <div class="mood-row">
+        <div class="container2" data-mood="Happy">😄<br>Happy</div>
+        <div class="container2" data-mood="Sad">😔<br>Sad</div>
+        <div class="container2" data-mood="Angry">😡<br>Angry</div>
+        <div class="container2" data-mood="Loved">🥰<br>Loved</div>
+        <div class="container2" data-mood="Relaxed">😌<br>Relaxed</div>
+        <div class="container2" data-mood="Playful">🥳<br>Playful</div>
+      </div>
+      <div class="textarea">
+        <textarea id="note" placeholder="Dear Diary, Today I feel..." required></textarea>
+      </div>
+      <button type="button" class="button" id="btn">Save Mood</button>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <a href="/home" class="nav-link active">Home</a>
+    <a href="/Reports" class="nav-link">Reports</a>
+    <a href="/profile" class="nav-link">Profile</a>
+    <form action="/logout" method="post" style="display:inline;">
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+  </nav>
+
+  <script>
+    const containers = document.querySelectorAll('.container2');
+    let selectedMood = null;
+
+    containers.forEach(container => {
+      container.addEventListener('click', () => {
+        containers.forEach(c => c.classList.remove('selected'));
+        container.classList.add('selected');
+        selectedMood = container.dataset.mood;
+      });
+    });
+
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", () => {
+      const note = document.getElementById("note").value.trim();
+
+      if (!selectedMood) {
+        alert("Please select a mood first!");
+        return;
+      }
+      if (!note) {
+        alert("Please write something in your diary!");
+        return;
+      }
+
+      axios.post("/home", { mood: selectedMood, note })
+        .then(res => {
+          selectedMood = null;
+          document.getElementById("note").value = "";
+          containers.forEach(c => c.classList.remove('selected'));
+          window.location.reload();
+        })
+        .catch(err => console.error(err));
+    });
+  </script>
+</body>
+</html>

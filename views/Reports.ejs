@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Weekly Mood Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Handlee&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../css/Reports.css">
+  
+</head>
+<body>
+  <div class="container1">
+    <h1 class="text1">Your Weekly Mood Report</h1>
+  </div>
+
+  <div class="greeting-section">
+    <h2 class="text2">Hello, <%= Name %>!</h2>
+    <% if (!Days) { %>
+      <p class="text3">😭 Logged 0 days in a row 😭</p>
+    <% } else { %>
+      <p class="text3">✨ Logged <%= Days %> days in a row ✨</p>
+    <% } %>
+  </div>
+
+<div class="charts-row">
+  <div class="container4">
+    <h2 class="text4">Mood Distribution</h2>
+    <canvas id="Dist_Chart" height="220"></canvas>
+  </div>
+  <div class="container4">
+    <h2 class="text4">Mood Trends</h2>
+    <canvas id="Trends_Chart" height="220"></canvas>
+  </div>
+</div>
+
+<div class="entries-row" style="display:flex; justify-content:center;">
+  <div class="container4" style="max-width:600px; width:100%;">
+    <h2 class="text4">Mood Entries</h2>
+    <% if (locals.Entries) { %>
+    <div class="entries-list">
+      <% Entries.forEach(element => { %>
+        <div class="entry-card">
+          <div><strong>Mood:</strong> <%= element.mood %></div>
+          <div><strong>Note:</strong> <%= element.note %></div>
+          <div class="entry-date"><strong>Created At:</strong> <%= element.createdAt %></div>
+          <form action="/Reports" method="post" style="display:inline;">
+            <input type="hidden" name="noteId" value="<%= element._id %>">
+            <button class="delete-btn" type="submit">Delete</button>
+          </form>
+        </div>
+      <% }); %>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+
+  <nav class="navbar">
+    <a href="/home" class="nav-link">Home</a>
+    <a href="/Reports" class="nav-link active">Reports</a>
+    <a href="/profile" class="nav-link">Profile</a>
+  </nav>
+
+  <script>
+    const moodCounts = <%- moodCounts %>;
+    const distCtx = document.getElementById('Dist_Chart').getContext('2d');
+    new Chart(distCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(moodCounts),
+        datasets: [{
+          data: Object.values(moodCounts),
+          backgroundColor: ['#f9a8d4', '#a5b4fc', '#fcd34d', '#6ee7b7', '#fca5a5', '#fdba74'],
+          borderWidth: 2,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { family: 'Kalam', size: 16 } } },
+          title: { display: false }
+        },
+        cutout: '60%'
+      }
+    });
+
+  const moodScores = <%- moodScores %>;
+const trendLabels = <%- trendLabels %>;
+const trendsCtx = document.getElementById('Trends_Chart').getContext('2d');
+
+new Chart(trendsCtx, {
+  type: 'line',
+  data: {
+    labels: trendLabels,
+    datasets: [{
+      label: 'Notes per Day',
+      data: moodScores,
+      borderColor: '#f472b6',
+      backgroundColor: 'rgba(244,114,182,0.10)',
+      tension: 0.5,
+      spanGaps: true,
+      pointRadius: 4,
+      pointBackgroundColor: '#f472b6',
+      pointBorderColor: '#fff',
+      fill: true
+    }]
+  },
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Number of Notes',
+          font: { family: 'Handlee', size: 16, weight: 'bold' },
+          color: '#333'
+        },
+        ticks: {
+          stepSize: 1,
+          font: { family: 'Kalam', size: 14, weight: 'bold' },
+          color: '#333'
+        },
+        grid: {
+          borderColor: '#333',
+          borderWidth: 2,
+          color: 'rgba(0,0,0,0.05)'
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Date',
+          font: { family: 'Handlee', size: 16, weight: 'bold' },
+          color: '#333'
+        },
+        ticks: {
+          font: { family: 'Kalam', size: 13, weight: 'bold' },
+          color: '#333'
+        },
+        grid: {
+          borderColor: '#333',
+          borderWidth: 2,
+          color: 'rgba(0,0,0,0.05)'
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return `Notes: ${context.parsed.y}`;
+          }
+        }
+      }
+    }
+  }
+});
+
+
+    </script>
+</body>
+</html>
