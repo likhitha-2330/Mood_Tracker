@@ -6,20 +6,26 @@
   <title>Cozy Journal SignUp</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Handlee&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/Login.css">
+</head>
 <body>
-  <div class="container">
+  <div class="login-container">
     <h1>Cozy Journal</h1>
-    <p class="text1">SignUp to your personal space for daily reflections, mood tracking, and cherished memories. Let's make every entry a delightful moment.</p>
-    <%if(locals.msg){%>
-        <p><%= msg%></p>
+    <p class="text1">
+      SignUp to your personal space for daily reflections, mood tracking, and cherished memories. Let's make every entry a delightful moment.
+    </p>
+
+    <% if(locals.msg){ %>
+      <p><%= msg %></p>
     <% } %>
+
     <form action="/signUp" method="post">
-      <input type="text" name="Username" placeholder="Username" required> 
-      <input type="password" name="Password" placeholder="Password" required> 
+      <input type="text" name="Username" placeholder="Username" required>
+      <input type="password" name="Password" placeholder="Password" required>
       <input type="number" name="Age" placeholder="Age" required>
       <input type="email" name="Email" placeholder="Email" required>
       <button class="button">🕮 SignUp</button>
     </form>
+
     <a href="/" class="button2">♡ Back to Login</a>
   </div>
 </body>
