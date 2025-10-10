@@ -75,6 +75,8 @@ body::before {
 
 .entries-row {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .entries-list {
@@ -156,7 +158,6 @@ body::before {
   color: #ff1493;
 }
 
-/* Scrollbar for entries */
 .entries-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -182,20 +183,9 @@ body::before {
 }
 
 @media(max-width:500px){
-  .container1 h1.text1 {
-    font-size: 24px;
-  }
-  .greeting-section h2.text2 {
-    font-size: 20px;
-  }
-  .greeting-section p.text3 {
-    font-size: 14px;
-  }
-  .container4 h2.text4 {
-    font-size: 18px;
-  }
-  .delete-btn {
-    padding: 5px 8px;
-    font-size: 12px;
-  }
+  .container1 h1.text1 { font-size: 24px; }
+  .greeting-section h2.text2 { font-size: 20px; }
+  .greeting-section p.text3 { font-size: 14px; }
+  .container4 h2.text4 { font-size: 18px; }
+  .delete-btn { padding: 5px 8px; font-size: 12px; }
 }
