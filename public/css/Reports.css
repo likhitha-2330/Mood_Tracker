@@ -62,9 +62,10 @@ body::before {
   justify-content: center;
 }
 
-.container4 {
+.charts-row .container4 {
   width: 100%;
   max-width: 430px;
+  margin-bottom: 20px;
 }
 
 .container4 h2.text4 {
@@ -172,14 +173,14 @@ body::before {
   border-radius: 3px;
 }
 
+.chart-canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
 @media(max-width:900px){
-  .charts-row {
-    flex-direction: column;
-    align-items: center;
-  }
-  .container4 {
-    max-width: 90%;
-  }
+  .charts-row { flex-direction: column; align-items: center; }
+  .container4 { max-width: 90%; }
 }
 
 @media(max-width:500px){
